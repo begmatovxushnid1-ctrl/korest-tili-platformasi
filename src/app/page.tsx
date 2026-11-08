@@ -4,13 +4,14 @@ import React, { useState, useEffect } from 'react';
 import FlashcardDeck from '../components/FlashcardDeck';
 import GrammarWorkbook from '../components/GrammarWorkbook';
 import Leaderboard from '../components/Leaderboard';
+import AITutorChat from '../components/AITutorChat';
 import { initialWords, grammarExercises, initialLeaderboard } from '../data/mockData';
 import { WordItem, LeaderboardUser } from '../types';
 import { speakKorean } from '../utils/korean';
-import { Flame, Zap, Volume2, BookOpen, PenTool, Trophy, Sparkles } from 'lucide-react';
+import { Flame, Zap, Volume2, BookOpen, PenTool, Trophy, Sparkles, Bot } from 'lucide-react';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'study' | 'grammar' | 'leaderboard'>('study');
+  const [activeTab, setActiveTab] = useState<'study' | 'grammar' | 'leaderboard' | 'ai'>('study');
   const [words, setWords] = useState<WordItem[]>(initialWords);
   const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>(initialLeaderboard);
   const [streak, setStreak] = useState(5);
@@ -62,7 +63,7 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-rose-500 selection:text-white">
-      {/* Authentic Korea Background Wallpaper with Dark Gradient Overlay */}
+      {/* Authentic Korea Background Wallpaper */}
       <div 
         className="fixed inset-0 pointer-events-none z-0 bg-cover bg-center bg-no-repeat opacity-25 filter blur-[1px]"
         style={{
@@ -70,7 +71,7 @@ export default function Home() {
         }}
       />
       
-      {/* Atmospheric Ambient Glows */}
+      {/* Atmospheric Overlays */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/95 to-zinc-950" />
       <div className="fixed -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-rose-600/20 blur-[130px] pointer-events-none z-0 rounded-full" />
       <div className="fixed -bottom-40 right-10 w-[500px] h-[300px] bg-amber-600/15 blur-[140px] pointer-events-none z-0 rounded-full" />
@@ -86,7 +87,7 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-2">
-                  HanguGo <span className="text-[11px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-bold border border-rose-500/30">PRO</span>
+                  HanguGo <span className="text-[11px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-bold border border-rose-500/30">AI PRO</span>
                 </h1>
                 <p className="text-[11px] text-zinc-400 hidden sm:block">Koreys tili aqlli o&apos;rganish platformasi</p>
               </div>
@@ -94,7 +95,6 @@ export default function Home() {
 
             {/* Gamification Bar */}
             <div className="flex items-center gap-2.5 sm:gap-4">
-              {/* Streak */}
               <div
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs sm:text-sm font-bold transition-all shadow-md ${
                   dailyGoalMet
@@ -107,13 +107,11 @@ export default function Home() {
                 <span>{streak} kun</span>
               </div>
 
-              {/* Points */}
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-850/80 border border-zinc-700/80 text-amber-400 text-xs sm:text-sm font-bold shadow-md">
                 <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
                 <span>{points} XP</span>
               </div>
 
-              {/* Korean Voice Audio Demo */}
               <button
                 onClick={() => speakKorean('안녕하세요! 한국어 공부를 환영합니다.')}
                 className="p-2 bg-zinc-800/90 hover:bg-zinc-700 text-rose-400 rounded-xl transition-all cursor-pointer border border-zinc-700/60 shadow-md"
@@ -132,22 +130,28 @@ export default function Home() {
             
             <div className="max-w-xl relative z-10">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/20 text-rose-300 text-xs font-bold rounded-full border border-rose-500/30 uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" /> Bugungi dars rejasi
+                <Sparkles className="w-3.5 h-3.5" /> Sun&apos;iy Intellekt bilan integratsiya qilindi
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-white mt-3 leading-tight">
-                Koreys tilini qulay va interaktiv o&apos;rganing!
+                Koreys tilini AI Ustozingiz bilan o&apos;rganing!
               </h2>
               <p className="text-zinc-300 text-sm mt-2 leading-relaxed">
-                Raqamli <strong className="text-rose-400">단어장</strong> orqali so&apos;zlarni yodlang, <strong className="text-amber-400">받침 (Batchim)</strong> grammatika daftarchasida mashq qiling va reytingda peshqadam bo&apos;ling.
+                Raqamli <strong className="text-rose-400">단어장</strong>, interaktiv <strong className="text-amber-400">받침 (Batchim)</strong> testlari va 24/7 savollarga javob beruvchi <strong className="text-emerald-400">AI Koreys tili ustozi</strong>.
               </p>
 
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-3 mt-6">
                 <button
+                  onClick={() => setActiveTab('ai')}
+                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-xs sm:text-sm rounded-xl hover:opacity-95 shadow-lg shadow-emerald-500/25 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  <Bot className="w-4 h-4" /> AI Ustoz bilan suhbat
+                </button>
+                <button
                   onClick={() => setActiveTab('study')}
                   className="px-5 py-2.5 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-bold text-xs sm:text-sm rounded-xl hover:opacity-95 shadow-lg shadow-rose-500/25 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <Flame className="w-4 h-4" /> Bugungi mashqlar
+                  <Flame className="w-4 h-4" /> Bugungi so&apos;zlar
                 </button>
                 <button
                   onClick={() => setActiveTab('grammar')}
@@ -161,6 +165,16 @@ export default function Home() {
 
           {/* Navigation Tabs */}
           <div className="flex border-b border-zinc-800/90 mb-8 overflow-x-auto gap-2">
+            <button
+              onClick={() => setActiveTab('ai')}
+              className={`pb-3 px-4 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+                activeTab === 'ai'
+                  ? 'border-emerald-500 text-emerald-400'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              <Bot className="w-4 h-4" /> AI Koreys Ustoz (Chat)
+            </button>
             <button
               onClick={() => setActiveTab('study')}
               className={`pb-3 px-4 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
@@ -194,6 +208,10 @@ export default function Home() {
           </div>
 
           {/* Tab Views */}
+          {activeTab === 'ai' && (
+            <AITutorChat />
+          )}
+
           {activeTab === 'study' && (
             <FlashcardDeck
               words={words}
@@ -216,7 +234,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="mt-20 border-t border-zinc-800/80 py-8 text-center text-xs text-zinc-500 bg-zinc-950/60 backdrop-blur-md">
-          <p>HanguGo • Koreys tili platformasi © 2026. Next.js & Tailwind CSS.</p>
+          <p>HanguGo • Koreys tili platformasi © 2026. Sun&apos;iy Intellekt, Next.js & Tailwind CSS.</p>
           <p className="mt-1">So&apos;zlar, grammatika, ovozli talaffuz va gamifikatsiya bilan quvvatlangan.</p>
         </footer>
       </div>
