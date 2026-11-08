@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { GrammarExercise } from '../types';
 import { speakKorean, checkHasBatchim } from '../utils/korean';
+import { Volume2, Sparkles, Check, AlertCircle, ArrowRight } from 'lucide-react';
 
 interface GrammarWorkbookProps {
   exercises: GrammarExercise[];
@@ -39,7 +40,6 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
     if (feedback !== 'idle' || !typedAnswer.trim()) return;
 
     const cleanInput = typedAnswer.trim();
-    // Accept either suffix or full word+suffix
     const isCorrect =
       cleanInput === ex.correctSuffix ||
       cleanInput === `${ex.targetWord}${ex.correctSuffix}` ||
@@ -48,7 +48,7 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
     if (isCorrect) {
       setFeedback('correct');
       setStreakCount((prev) => prev + 1);
-      onExerciseComplete(30); // Higher points for typing!
+      onExerciseComplete(30);
       speakKorean(`${ex.targetWord}${ex.correctSuffix}`);
     } else {
       setFeedback('wrong');
@@ -66,19 +66,19 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
   const targetHasBatchim = checkHasBatchim(ex.targetWord);
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-zinc-900/80 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+    <div className="w-full max-w-2xl mx-auto bg-zinc-900/90 backdrop-blur-2xl border border-zinc-800/90 rounded-3xl p-6 sm:p-8 shadow-2xl">
       {/* Exercise Header */}
-      <div className="flex items-center justify-between border-b border-zinc-800/80 pb-4 mb-6">
+      <div className="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
         <div>
-          <span className="text-xs font-semibold px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
+          <span className="text-[11px] font-bold px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
             연습장 • {ex.pattern}
           </span>
-          <h2 className="text-lg sm:text-xl font-bold text-white mt-1.5">{ex.title}</h2>
+          <h2 className="text-lg sm:text-xl font-black text-white mt-2">{ex.title}</h2>
         </div>
         <div className="text-right">
-          <span className="text-xs text-zinc-400">Savol {currentIdx + 1} / {exercises.length}</span>
+          <span className="text-xs text-zinc-400 font-medium">Savol {currentIdx + 1} / {exercises.length}</span>
           {streakCount > 1 && (
-            <div className="text-xs text-orange-400 font-bold flex items-center justify-end gap-1">
+            <div className="text-xs text-orange-400 font-bold flex items-center justify-end gap-1 mt-1">
               <span>🔥 {streakCount} ketma-ket to&apos;g&apos;ri!</span>
             </div>
           )}
@@ -86,13 +86,13 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
       </div>
 
       {/* Interactive Batchim Inspector Box */}
-      <div className="p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800 mb-6">
-        <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+      <div className="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 mb-6">
+        <div className="flex flex-wrap items-center justify-between text-xs text-zinc-400 mb-2 gap-2">
           <span>Qoida va 받침 (Batchim) tahlili:</span>
-          <span className="text-rose-400 font-mono font-medium">{ex.batchimRule}</span>
+          <span className="text-rose-400 font-mono font-semibold">{ex.batchimRule}</span>
         </div>
         <div className="flex items-center gap-3">
-          <div className="px-3 py-1.5 bg-zinc-800 rounded-xl font-mono text-base font-bold text-white border border-zinc-700">
+          <div className="px-3.5 py-1.5 bg-zinc-800 rounded-xl font-mono text-base font-bold text-white border border-zinc-700">
             {ex.targetWord}
           </div>
           <p className="text-xs sm:text-sm text-zinc-300">
@@ -111,8 +111,8 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
             setMode('choice');
             setFeedback('idle');
           }}
-          className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
-            mode === 'choice' ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:text-zinc-200'
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+            mode === 'choice' ? 'bg-zinc-800 text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
           Variant tanlash
@@ -122,17 +122,18 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
             setMode('type');
             setFeedback('idle');
           }}
-          className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
-            mode === 'type' ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:text-zinc-200'
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center gap-1 ${
+            mode === 'type' ? 'bg-zinc-800 text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
-          Klaviaturada yozish (Bonus ball)
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          Klaviaturada yozish (+30 XP)
         </button>
       </div>
 
       {/* Sentence Stem */}
-      <div className="text-center py-6 px-4 bg-gradient-to-r from-zinc-800/40 via-zinc-800/60 to-zinc-800/40 rounded-2xl border border-zinc-700/50 mb-6">
-        <p className="text-2xl sm:text-3xl font-bold text-white tracking-wide font-sans">
+      <div className="text-center py-6 px-4 bg-zinc-950/50 rounded-2xl border border-zinc-800/80 mb-6">
+        <p className="text-2xl sm:text-3xl font-black text-white tracking-wide">
           {ex.questionStem.replace(
             '[____]',
             feedback === 'correct' ? `[ ${ex.correctSuffix} ]` : '[ ___ ]'
@@ -145,7 +146,7 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
       {mode === 'choice' ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
           {ex.options.map((option) => {
-            let btnStyle = 'bg-zinc-800 hover:bg-zinc-700 text-zinc-100 border-zinc-700';
+            let btnStyle = 'bg-zinc-800/80 hover:bg-zinc-700/80 text-zinc-100 border-zinc-700/70';
 
             if (feedback !== 'idle' && option === ex.correctSuffix) {
               btnStyle = 'bg-emerald-600 text-white border-emerald-500 shadow-lg shadow-emerald-600/30 ring-2 ring-emerald-400';
@@ -158,7 +159,7 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
                 key={option}
                 onClick={() => handleSelectOption(option)}
                 disabled={feedback !== 'idle'}
-                className={`py-3.5 text-lg font-bold rounded-2xl border transition-all active:scale-95 ${btnStyle}`}
+                className={`py-3.5 text-lg font-bold rounded-2xl border transition-all active:scale-95 cursor-pointer disabled:cursor-default ${btnStyle}`}
               >
                 -{option}
               </button>
@@ -173,12 +174,12 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
             placeholder={`Qo'shimchani yozing: masalan "${ex.correctSuffix}"`}
             value={typedAnswer}
             onChange={(e) => setTypedAnswer(e.target.value)}
-            className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-white text-center text-lg font-bold focus:outline-none focus:border-rose-500"
+            className="flex-1 bg-zinc-800/80 border border-zinc-700 rounded-xl px-4 py-3 text-white text-center text-lg font-bold placeholder:text-zinc-500 focus:outline-none focus:border-rose-500"
           />
           <button
             type="submit"
             disabled={feedback !== 'idle' || !typedAnswer.trim()}
-            className="px-6 py-3 bg-rose-500 text-white font-semibold rounded-xl hover:bg-rose-600 disabled:opacity-50 transition-all"
+            className="px-6 py-3 bg-rose-500 text-white font-bold rounded-xl hover:bg-rose-600 disabled:opacity-50 transition-all cursor-pointer shadow-md shadow-rose-500/20"
           >
             Tekshirish
           </button>
@@ -194,7 +195,11 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
               : 'bg-rose-950/40 border-rose-500/40 text-rose-200'
           }`}
         >
-          <span className="text-2xl">{feedback === 'correct' ? '🎉' : '❌'}</span>
+          {feedback === 'correct' ? (
+            <Check className="w-6 h-6 text-emerald-400 shrink-0" />
+          ) : (
+            <AlertCircle className="w-6 h-6 text-rose-400 shrink-0" />
+          )}
           <div className="flex-1">
             <h4 className="font-bold text-sm">
               {feedback === 'correct' ? 'To\'g\'ri javob! Qoyil!' : 'Xato qildingiz, tushuntirish:'}
@@ -203,10 +208,10 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
           </div>
           <button
             onClick={() => speakKorean(`${ex.targetWord}${ex.correctSuffix}`)}
-            className="p-2 bg-zinc-800 rounded-xl hover:bg-zinc-700 text-white"
+            className="p-2 bg-zinc-800/90 rounded-xl hover:bg-zinc-700 text-white cursor-pointer"
             title="Talaffuzni eshitish"
           >
-            🔊
+            <Volume2 className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -215,9 +220,10 @@ export default function GrammarWorkbook({ exercises, onExerciseComplete }: Gramm
       {feedback !== 'idle' && (
         <button
           onClick={handleNext}
-          className="w-full py-3 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-bold rounded-xl shadow-lg shadow-rose-500/20 hover:opacity-95 active:scale-98 transition-all"
+          className="w-full py-3 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-bold rounded-xl shadow-lg shadow-rose-500/20 hover:opacity-95 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
-          Keyingi mashqqa o&apos;tish ➔
+          Keyingi mashqqa o&apos;tish
+          <ArrowRight className="w-4 h-4" />
         </button>
       )}
     </div>
