@@ -13,6 +13,7 @@ export interface Translations {
   btnGrammarWorkbook: string;
   btnAiChat: string;
   tabAiChat: string;
+  tabGrammarLessons: string;
   tabDictionary: string;
   tabGrammar: string;
   tabLeaderboard: string;
@@ -70,13 +71,14 @@ export const translations: Record<Language, Translations> = {
     listenGreeting: 'Salomlashish ovozini eshitish',
     todayPlanBadge: 'Bugungi dars rejasi',
     heroTitle: 'Koreys tilini AI Ustozingiz bilan o\'rganing!',
-    heroDesc: 'Raqamli 단어장, interaktiv 받침 (Batchim) testlari va 24/7 savollarga javob beruvchi haqiqiy AI Koreys tili ustozi.',
+    heroDesc: 'Raqamli 단어장, to\'liq grammatika darslari, interaktiv 받침 testlari va jonli Seul soati.',
     btnTodayWords: 'Bugungi so\'zlar',
     btnGrammarWorkbook: 'Grammatika 연습장',
     btnAiChat: 'AI Ustoz bilan suhbat',
-    tabAiChat: 'AI Koreys Ustoz (Chat)',
+    tabAiChat: 'AI Koreys Ustoz',
+    tabGrammarLessons: 'Grammatika Darslari',
     tabDictionary: 'Raqamli 단어장 (Lug\'at)',
-    tabGrammar: 'Grammatika 연습장 (Batchim)',
+    tabGrammar: '연습장 (Batchim Test)',
     tabLeaderboard: 'Reyting Doskasi',
     online: 'ONLINE',
     aiTutorRole: 'Grammatika, talaffuz va so\'zlar bo\'yicha sun\'iy intellekt',
@@ -120,7 +122,7 @@ export const translations: Record<Language, Translations> = {
     place3: '3-o\'rin',
     youBadge: 'SIZ',
     footerRights: 'HanguGo • Koreys tili platformasi © 2026. Sun\'iy Intellekt, Next.js & Tailwind CSS.',
-    footerTagline: 'So\'zlar, grammatika, ovozli talaffuz va gamifikatsiya bilan quvvatlangan.',
+    footerTagline: 'So\'zlar, grammatika darslari, ovozli talaffuz va gamifikatsiya bilan quvvatlangan.',
   },
   ru: {
     appName: 'HanguGo',
@@ -130,13 +132,14 @@ export const translations: Record<Language, Translations> = {
     listenGreeting: 'Послушать приветствие',
     todayPlanBadge: 'План занятий на сегодня',
     heroTitle: 'Учите корейский язык с персональным AI-репетитором!',
-    heroDesc: 'Цифровой словарь 단어장, интерактивные тесты 받침 (батчим) и круглосуточный AI-наставник.',
+    heroDesc: 'Цифровой словарь 단어장, полные уроки грамматики, интерактивные тесты 받침 и живые часы Сеула.',
     btnTodayWords: 'Слова на сегодня',
     btnGrammarWorkbook: 'Грамматика 연습장',
     btnAiChat: 'Чат с AI-учителем',
     tabAiChat: 'AI-Учитель (Чат)',
-    tabDictionary: 'Словарь 단어장 (Карточки)',
-    tabGrammar: 'Грамматика 연습장 (Батчим)',
+    tabGrammarLessons: 'Уроки грамматики',
+    tabDictionary: 'Словарь 단어장',
+    tabGrammar: '연습장 (Тесты батчим)',
     tabLeaderboard: 'Таблица лидеров',
     online: 'ОНЛАЙН',
     aiTutorRole: 'Искусственный интеллект для грамматики и лексики',
@@ -180,7 +183,7 @@ export const translations: Record<Language, Translations> = {
     place3: '3-е место',
     youBadge: 'ВЫ',
     footerRights: 'HanguGo • Платформа корейского языка © 2026. AI, Next.js & Tailwind CSS.',
-    footerTagline: 'Обогащено словарным запасом, грамматикой, аудио и геймификацией.',
+    footerTagline: 'Обогащено словарным запасом, уроками грамматики, аудио и геймификацией.',
   },
   en: {
     appName: 'HanguGo',
@@ -190,13 +193,14 @@ export const translations: Record<Language, Translations> = {
     listenGreeting: 'Listen to greetings',
     todayPlanBadge: 'Today\'s Lesson Plan',
     heroTitle: 'Learn Korean with your personal AI Tutor!',
-    heroDesc: 'Digital vocabulary 단어장, interactive 받침 (Batchim) quizzes, and 24/7 AI Korean Teacher.',
+    heroDesc: 'Digital vocabulary 단어장, structured grammar lessons, interactive 받침 quizzes, and live Seoul clock.',
     btnTodayWords: 'Today\'s Words',
     btnGrammarWorkbook: 'Grammar 연습장',
     btnAiChat: 'Chat with AI Tutor',
-    tabAiChat: 'AI Korean Tutor (Chat)',
+    tabAiChat: 'AI Korean Tutor',
+    tabGrammarLessons: 'Grammar Lessons',
     tabDictionary: 'Vocabulary 단어장',
-    tabGrammar: 'Grammar 연습장 (Batchim)',
+    tabGrammar: '연습장 (Batchim Quiz)',
     tabLeaderboard: 'Leaderboard',
     online: 'ONLINE',
     aiTutorRole: 'AI Assistant for Grammar, Vocab & Pronunciation',
@@ -240,6 +244,6 @@ export const translations: Record<Language, Translations> = {
     place3: '3rd Place',
     youBadge: 'YOU',
     footerRights: 'HanguGo • Korean Platform © 2026. AI, Next.js & Tailwind CSS.',
-    footerTagline: 'Empowered by Vocab, Batchim Grammar, Audio TTS, and Gamification.',
+    footerTagline: 'Empowered by Vocab, Grammar Lessons, Audio TTS, and Gamification.',
   },
 };
