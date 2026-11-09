@@ -7,10 +7,11 @@ import GrammarLessons from '../components/GrammarLessons';
 import Leaderboard from '../components/Leaderboard';
 import AITutorChat from '../components/AITutorChat';
 import DualClock from '../components/DualClock';
+import AuthModal, { AuthUser } from '../components/AuthModal';
 import { initialWords, grammarExercises, initialLeaderboard } from '../data/mockData';
 import { WordItem, LeaderboardUser } from '../types';
 import { speakKorean } from '../utils/korean';
-import { Flame, Zap, Volume2, BookOpen, PenTool, Trophy, Sparkles, Bot, GraduationCap } from 'lucide-react';
+import { Flame, Zap, Volume2, BookOpen, PenTool, Trophy, Sparkles, Bot, GraduationCap, UserCircle, LogOut } from 'lucide-react';
 import { Language, translations } from '../data/translations';
 
 export default function Home() {
@@ -23,6 +24,55 @@ export default function Home() {
   const [streak, setStreak] = useState(5);
   const [points, setPoints] = useState(1520);
   const [dailyGoalMet, setDailyGoalMet] = useState(false);
+
+  // User Authentication State
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  // Load user from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedUser = localStorage.getItem('hangugo_user');
+      if (savedUser) {
+        try {
+          const parsed: AuthUser = JSON.parse(savedUser);
+          setUser(parsed);
+          setPoints(parsed.points || 1520);
+          setStreak(parsed.streak || 5);
+          // update current user in leaderboard
+          setLeaderboard((prev) =>
+            prev.map((u) =>
+              u.isCurrentUser
+                ? { ...u, name: parsed.name, avatar: parsed.avatar }
+                : u
+            )
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
+
+  const handleLoginSuccess = (newUser: AuthUser) => {
+    setUser(newUser);
+    setPoints(newUser.points);
+    setStreak(newUser.streak);
+    setLeaderboard((prev) =>
+      prev.map((u) =>
+        u.isCurrentUser
+          ? { ...u, name: newUser.name, avatar: newUser.avatar, points: newUser.points }
+          : u
+      )
+    );
+  };
+
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('hangugo_user');
+    }
+    setUser(null);
+  };
 
   const learnedCount = words.filter((w) => w.learned).length;
 
@@ -69,7 +119,7 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-rose-500 selection:text-white">
-      {/* Soft & Rich Korea Skyline Wallpaper (High Visibility) */}
+      {/* Soft Korea Skyline Wallpaper */}
       <div 
         className="fixed inset-0 pointer-events-none z-0 bg-cover bg-center bg-no-repeat opacity-50 filter saturate-125"
         style={{
@@ -77,7 +127,7 @@ export default function Home() {
         }}
       />
       
-      {/* Light & Gradient Overlays - not pitch black, lively aesthetic */}
+      {/* Atmosphere Gradient Overlays */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-b from-indigo-950/60 via-slate-950/75 to-slate-950/90" />
       <div className="fixed top-10 left-1/4 w-[500px] h-[300px] bg-rose-500/25 blur-[120px] pointer-events-none z-0 rounded-full" />
       <div className="fixed bottom-20 right-10 w-[550px] h-[350px] bg-sky-500/20 blur-[130px] pointer-events-none z-0 rounded-full" />
@@ -104,9 +154,9 @@ export default function Home() {
               <DualClock />
             </div>
 
-            {/* Right Side: Interactive Language Buttons + Gamification */}
+            {/* Right Side: Auth Button + Languages + Gamification */}
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
-              {/* Language Selector: 3 Clickable Flag Buttons */}
+              {/* Language Selector */}
               <div className="flex items-center bg-slate-900/90 border border-slate-700 rounded-2xl p-1 shadow-md gap-1">
                 <button
                   type="button"
@@ -170,14 +220,28 @@ export default function Home() {
                 <span>{points} XP</span>
               </div>
 
-              {/* Korean Speech Button */}
-              <button
-                onClick={() => speakKorean('안녕하세요! 한국어 공부를 환영합니다.')}
-                className="p-2 bg-slate-800 hover:bg-slate-700 text-rose-300 rounded-xl transition-all cursor-pointer border border-slate-700/80 shadow-md"
-                title={t.listenGreeting}
-              >
-                <Volume2 className="w-4 h-4" />
-              </button>
+              {/* User Profile / Register Button */}
+              {user ? (
+                <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-2xl shadow-md">
+                  <span className="text-lg">{user.avatar}</span>
+                  <span className="text-xs font-bold text-white max-w-[90px] truncate">{user.name}</span>
+                  <button
+                    onClick={handleLogout}
+                    className="text-slate-400 hover:text-rose-400 p-1 cursor-pointer transition-colors"
+                    title="Chiqish (Logout)"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setIsAuthModalOpen(true)}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-rose-500 to-amber-500 hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-lg shadow-rose-500/25 active:scale-95 transition-all cursor-pointer"
+                >
+                  <UserCircle className="w-4 h-4" />
+                  <span>{lang === 'ru' ? 'Войти' : lang === 'en' ? 'Sign In' : 'Kirish'}</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -316,6 +380,14 @@ export default function Home() {
           <p className="mt-1">{t.footerTagline}</p>
         </footer>
       </div>
+
+      {/* Auth Modal (Register / Login) */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+        currentLang={lang}
+      />
     </div>
   );
 }
