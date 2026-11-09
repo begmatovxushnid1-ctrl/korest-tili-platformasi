@@ -8,7 +8,7 @@ import AITutorChat from '../components/AITutorChat';
 import { initialWords, grammarExercises, initialLeaderboard } from '../data/mockData';
 import { WordItem, LeaderboardUser } from '../types';
 import { speakKorean } from '../utils/korean';
-import { Flame, Zap, Volume2, BookOpen, PenTool, Trophy, Sparkles, Bot, Globe } from 'lucide-react';
+import { Flame, Zap, Volume2, BookOpen, PenTool, Trophy, Sparkles, Bot } from 'lucide-react';
 import { Language, translations } from '../data/translations';
 
 export default function Home() {
@@ -84,8 +84,8 @@ export default function Home() {
       <div className="relative z-10">
         {/* Top Navbar */}
         <header className="sticky top-0 z-40 bg-zinc-900/80 backdrop-blur-xl border-b border-zinc-800/80 shadow-lg">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-3 shrink-0">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-rose-600/30">
                 한
               </div>
@@ -97,20 +97,54 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Side: Language Switcher + Gamification */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* Language Selector */}
-              <div className="flex items-center bg-zinc-850/90 border border-zinc-700/80 rounded-xl p-0.5 shadow-md">
-                <Globe className="w-3.5 h-3.5 text-zinc-400 ml-2 mr-1" />
-                <select
-                  value={lang}
-                  onChange={(e) => setLang(e.target.value as Language)}
-                  className="bg-transparent text-xs font-bold text-zinc-200 py-1 pr-2 rounded-lg focus:outline-none cursor-pointer"
+            {/* Right Side: Interactive Language Buttons + Gamification */}
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+              {/* Language Selector: 3 Clickable Flag Buttons */}
+              <div className="flex items-center bg-zinc-900/90 border border-zinc-700/80 rounded-2xl p-1 shadow-md gap-1">
+                {/* Uzbek */}
+                <button
+                  type="button"
+                  onClick={() => setLang('uz')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    lang === 'uz'
+                      ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30 scale-105'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
+                  }`}
+                  title="O'zbek tili"
                 >
-                  <option value="uz" className="bg-zinc-900 text-white">🇺🇿 O&apos;zbek</option>
-                  <option value="ru" className="bg-zinc-900 text-white">🇷🇺 Русский</option>
-                  <option value="en" className="bg-zinc-900 text-white">🇬🇧 English</option>
-                </select>
+                  <span className="text-sm">🇺🇿</span>
+                  <span className="hidden sm:inline">UZ</span>
+                </button>
+
+                {/* Russian */}
+                <button
+                  type="button"
+                  onClick={() => setLang('ru')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    lang === 'ru'
+                      ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30 scale-105'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
+                  }`}
+                  title="Русский язык"
+                >
+                  <span className="text-sm">🇷🇺</span>
+                  <span className="hidden sm:inline">RU</span>
+                </button>
+
+                {/* English */}
+                <button
+                  type="button"
+                  onClick={() => setLang('en')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    lang === 'en'
+                      ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30 scale-105'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
+                  }`}
+                  title="English"
+                >
+                  <span className="text-sm">🇬🇧</span>
+                  <span className="hidden sm:inline">EN</span>
+                </button>
               </div>
 
               {/* Streak */}
@@ -132,6 +166,7 @@ export default function Home() {
                 <span>{points} XP</span>
               </div>
 
+              {/* Korean Speech Button */}
               <button
                 onClick={() => speakKorean('안녕하세요! 한국어 공부를 환영합니다.')}
                 className="p-2 bg-zinc-800/90 hover:bg-zinc-700 text-rose-400 rounded-xl transition-all cursor-pointer border border-zinc-700/60 shadow-md"
