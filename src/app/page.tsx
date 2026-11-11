@@ -10,8 +10,7 @@ import DualClock from '../components/DualClock';
 import AuthModal, { AuthUser } from '../components/AuthModal';
 import { initialWords, grammarExercises, initialLeaderboard } from '../data/mockData';
 import { WordItem, LeaderboardUser } from '../types';
-import { speakKorean } from '../utils/korean';
-import { Flame, Zap, Volume2, BookOpen, PenTool, Trophy, Sparkles, Bot, GraduationCap, UserCircle, LogOut } from 'lucide-react';
+import { Flame, Zap, BookOpen, PenTool, Trophy, Bot, GraduationCap, UserCircle, LogOut } from 'lucide-react';
 import { Language, translations } from '../data/translations';
 
 export default function Home() {
@@ -133,8 +132,9 @@ export default function Home() {
       {/* Content Layer */}
       <div className="relative z-10">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-40 bg-slate-900/85 backdrop-blur-xl border-b border-slate-700/60 shadow-xl">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-2 flex flex-wrap items-center justify-between gap-3">
+        <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-xl border-b border-slate-700/60 shadow-xl">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 py-2 flex flex-wrap items-center justify-between gap-3">
+            {/* Logo */}
             <div className="flex items-center gap-3 shrink-0">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 via-rose-600 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-rose-500/30">
                 한
@@ -152,10 +152,10 @@ export default function Home() {
               <DualClock />
             </div>
 
-            {/* Right Side: Auth Button + Languages + Gamification */}
+            {/* Right Side: Language Selector + Streak + Points + Auth */}
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
-              {/* Language Selector: 3 Clickable Flag Buttons with clean text */}
-              <div className="flex items-center bg-slate-900/90 border border-slate-700 rounded-2xl p-1 shadow-md gap-1">
+              {/* Language Selector: 3 Clickable Flag Buttons */}
+              <div className="flex items-center bg-slate-900 border border-slate-700 rounded-2xl p-1 shadow-md gap-1">
                 <button
                   type="button"
                   onClick={() => setLang('uz')}
@@ -244,121 +244,76 @@ export default function Home() {
           </div>
 
           {/* Mobile Clock banner */}
-          <div className="lg:hidden max-w-6xl mx-auto px-4 pt-1 pb-2 flex justify-center">
+          <div className="lg:hidden max-w-7xl mx-auto px-4 pt-1 pb-2 flex justify-center">
             <DualClock />
           </div>
         </header>
 
         {/* Main Content Area */}
-        <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          {/* 1-QATOR: Asosiy Navigatsiya Menyulari (Eng tepada, birinchi qatorda!) */}
-          <div className="sticky top-20 z-30 bg-slate-950/80 backdrop-blur-xl p-2 rounded-2xl border border-slate-800/80 mb-6 shadow-xl overflow-x-auto">
-            <div className="flex items-center gap-2 min-w-max">
-              <button
-                onClick={() => setActiveTab('lessons')}
-                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
-                  activeTab === 'lessons'
-                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30 ring-1 ring-rose-400 scale-[1.02]'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
-                }`}
-              >
-                <GraduationCap className="w-4 h-4" /> {t.tabGrammarLessons}
-              </button>
-              <button
-                onClick={() => setActiveTab('ai')}
-                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
-                  activeTab === 'ai'
-                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 ring-1 ring-emerald-400 scale-[1.02]'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
-                }`}
-              >
-                <Bot className="w-4 h-4" /> {t.tabAiChat}
-              </button>
-              <button
-                onClick={() => setActiveTab('study')}
-                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
-                  activeTab === 'study'
-                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30 ring-1 ring-rose-400 scale-[1.02]'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
-                }`}
-              >
-                <BookOpen className="w-4 h-4" /> {t.tabDictionary}
-              </button>
-              <button
-                onClick={() => setActiveTab('grammar')}
-                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
-                  activeTab === 'grammar'
-                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30 ring-1 ring-rose-400 scale-[1.02]'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
-                }`}
-              >
-                <PenTool className="w-4 h-4" /> {t.tabGrammar}
-              </button>
-              <button
-                onClick={() => setActiveTab('leaderboard')}
-                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
-                  activeTab === 'leaderboard'
-                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30 ring-1 ring-rose-400 scale-[1.02]'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
-                }`}
-              >
-                <Trophy className="w-4 h-4" /> {t.tabLeaderboard}
-              </button>
-            </div>
-          </div>
-
-          {/* Hero Banner (Qulay, ixcham va zamonaviy) */}
-          <div className="bg-gradient-to-r from-rose-950/70 via-slate-900/90 to-indigo-950/70 backdrop-blur-2xl border border-rose-500/30 rounded-3xl p-6 sm:p-7 mb-8 relative overflow-hidden shadow-2xl">
-            <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-gradient-to-l from-rose-500/15 to-transparent pointer-events-none" />
-            
-            <div className="max-w-xl relative z-10">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/20 text-rose-300 text-xs font-bold rounded-full border border-rose-500/40 uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" /> {t.todayPlanBadge}
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-white mt-2.5 leading-tight">
-                {t.heroTitle}
-              </h2>
-              <p className="text-slate-200 text-sm mt-2 leading-relaxed">
-                {t.heroDesc}
-              </p>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-2.5 mt-5">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+          {/* ASOSIY QATOR: Barcha bo'limlar navigatsiyasi ENG TEPADA joylashdi */}
+          <div className="sticky top-20 z-30 bg-slate-900/90 backdrop-blur-xl p-2 rounded-2xl border border-slate-750 mb-6 shadow-2xl overflow-x-auto">
+            <div className="flex items-center justify-between gap-2 min-w-max">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => setActiveTab('lessons')}
-                  className={`px-4 py-2 text-white font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md ${
+                  className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
                     activeTab === 'lessons'
-                      ? 'bg-rose-600 ring-2 ring-white/50'
-                      : 'bg-rose-500 hover:bg-rose-600'
+                      ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/35 ring-1 ring-rose-400 scale-[1.02]'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
                 >
                   <GraduationCap className="w-4 h-4" /> {t.tabGrammarLessons}
                 </button>
                 <button
                   onClick={() => setActiveTab('ai')}
-                  className={`px-4 py-2 text-white font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md ${
+                  className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
                     activeTab === 'ai'
-                      ? 'bg-teal-700 ring-2 ring-white/50'
-                      : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-95'
+                      ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/35 ring-1 ring-emerald-400 scale-[1.02]'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
                 >
-                  <Bot className="w-4 h-4" /> {t.btnAiChat}
+                  <Bot className="w-4 h-4" /> {t.tabAiChat}
                 </button>
                 <button
                   onClick={() => setActiveTab('study')}
-                  className={`px-4 py-2 text-slate-100 font-bold text-xs sm:text-sm rounded-xl border border-slate-700 transition-all flex items-center gap-2 cursor-pointer shadow-md ${
+                  className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
                     activeTab === 'study'
-                      ? 'bg-slate-700 ring-2 ring-white/50'
-                      : 'bg-slate-800/90 hover:bg-slate-700'
+                      ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/35 ring-1 ring-rose-400 scale-[1.02]'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
                 >
-                  <Flame className="w-4 h-4" /> {t.btnTodayWords}
+                  <BookOpen className="w-4 h-4" /> {t.tabDictionary}
                 </button>
+                <button
+                  onClick={() => setActiveTab('grammar')}
+                  className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                    activeTab === 'grammar'
+                      ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/35 ring-1 ring-rose-400 scale-[1.02]'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                  }`}
+                >
+                  <PenTool className="w-4 h-4" /> {t.tabGrammar}
+                </button>
+                <button
+                  onClick={() => setActiveTab('leaderboard')}
+                  className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                    activeTab === 'leaderboard'
+                      ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/35 ring-1 ring-rose-400 scale-[1.02]'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                  }`}
+                >
+                  <Trophy className="w-4 h-4" /> {t.tabLeaderboard}
+                </button>
+              </div>
+
+              <div className="hidden md:flex items-center text-xs text-slate-400 pr-2 font-semibold">
+                🇰🇷 HanguGo Platformasi
               </div>
             </div>
           </div>
 
-          {/* Tab Views */}
+          {/* Tab Views: Endi o'quvchi darhol asosiy darslarni va kontentni ko'radi */}
           {activeTab === 'lessons' && (
             <GrammarLessons currentLang={lang} />
           )}
