@@ -18,18 +18,17 @@ export default function Home() {
   const [lang, setLang] = useState<Language>('uz');
   const t = translations[lang];
 
-  const [activeTab, setActiveTab] = useState<'study' | 'lessons' | 'grammar' | 'leaderboard' | 'ai'>('lessons');
+  const [activeTab, setActiveTab] = useState<'lessons' | 'ai' | 'study' | 'grammar' | 'leaderboard'>('lessons');
   const [words, setWords] = useState<WordItem[]>(initialWords);
   const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>(initialLeaderboard);
   const [streak, setStreak] = useState(5);
-  const [points, setPoints] = useState(1520);
+  const [points, setPoints] = useState(1680);
   const [dailyGoalMet, setDailyGoalMet] = useState(false);
 
   // User Authentication State
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // Load user from localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedUser = localStorage.getItem('hangugo_user');
@@ -37,9 +36,8 @@ export default function Home() {
         try {
           const parsed: AuthUser = JSON.parse(savedUser);
           setUser(parsed);
-          setPoints(parsed.points || 1520);
+          setPoints(parsed.points || 1680);
           setStreak(parsed.streak || 5);
-          // update current user in leaderboard
           setLeaderboard((prev) =>
             prev.map((u) =>
               u.isCurrentUser
@@ -135,7 +133,7 @@ export default function Home() {
       {/* Content Layer */}
       <div className="relative z-10">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/60 shadow-xl">
+        <header className="sticky top-0 z-40 bg-slate-900/85 backdrop-blur-xl border-b border-slate-700/60 shadow-xl">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-2 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3 shrink-0">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 via-rose-600 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-rose-500/30">
@@ -156,7 +154,7 @@ export default function Home() {
 
             {/* Right Side: Auth Button + Languages + Gamification */}
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
-              {/* Language Selector */}
+              {/* Language Selector: 3 Clickable Flag Buttons with clean text */}
               <div className="flex items-center bg-slate-900/90 border border-slate-700 rounded-2xl p-1 shadow-md gap-1">
                 <button
                   type="button"
@@ -169,7 +167,7 @@ export default function Home() {
                   title="O'zbek tili"
                 >
                   <span className="text-sm">🇺🇿</span>
-                  <span className="hidden sm:inline">UZ</span>
+                  <span>UZ</span>
                 </button>
 
                 <button
@@ -183,7 +181,7 @@ export default function Home() {
                   title="Русский язык"
                 >
                   <span className="text-sm">🇷🇺</span>
-                  <span className="hidden sm:inline">RU</span>
+                  <span>RU</span>
                 </button>
 
                 <button
@@ -197,7 +195,7 @@ export default function Home() {
                   title="English"
                 >
                   <span className="text-sm">🇬🇧</span>
-                  <span className="hidden sm:inline">EN</span>
+                  <span>EN</span>
                 </button>
               </div>
 
@@ -251,16 +249,73 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Hero Banner */}
+        {/* Main Content Area */}
         <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <div className="bg-gradient-to-r from-rose-950/70 via-slate-900/90 to-indigo-950/70 backdrop-blur-2xl border border-rose-500/30 rounded-3xl p-6 sm:p-8 mb-8 relative overflow-hidden shadow-2xl">
+          {/* 1-QATOR: Asosiy Navigatsiya Menyulari (Eng tepada, birinchi qatorda!) */}
+          <div className="sticky top-20 z-30 bg-slate-950/80 backdrop-blur-xl p-2 rounded-2xl border border-slate-800/80 mb-6 shadow-xl overflow-x-auto">
+            <div className="flex items-center gap-2 min-w-max">
+              <button
+                onClick={() => setActiveTab('lessons')}
+                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                  activeTab === 'lessons'
+                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30 ring-1 ring-rose-400 scale-[1.02]'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+                }`}
+              >
+                <GraduationCap className="w-4 h-4" /> {t.tabGrammarLessons}
+              </button>
+              <button
+                onClick={() => setActiveTab('ai')}
+                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                  activeTab === 'ai'
+                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 ring-1 ring-emerald-400 scale-[1.02]'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+                }`}
+              >
+                <Bot className="w-4 h-4" /> {t.tabAiChat}
+              </button>
+              <button
+                onClick={() => setActiveTab('study')}
+                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                  activeTab === 'study'
+                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30 ring-1 ring-rose-400 scale-[1.02]'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+                }`}
+              >
+                <BookOpen className="w-4 h-4" /> {t.tabDictionary}
+              </button>
+              <button
+                onClick={() => setActiveTab('grammar')}
+                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                  activeTab === 'grammar'
+                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30 ring-1 ring-rose-400 scale-[1.02]'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+                }`}
+              >
+                <PenTool className="w-4 h-4" /> {t.tabGrammar}
+              </button>
+              <button
+                onClick={() => setActiveTab('leaderboard')}
+                className={`py-2.5 px-4 text-xs sm:text-sm font-black rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                  activeTab === 'leaderboard'
+                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30 ring-1 ring-rose-400 scale-[1.02]'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+                }`}
+              >
+                <Trophy className="w-4 h-4" /> {t.tabLeaderboard}
+              </button>
+            </div>
+          </div>
+
+          {/* Hero Banner (Qulay, ixcham va zamonaviy) */}
+          <div className="bg-gradient-to-r from-rose-950/70 via-slate-900/90 to-indigo-950/70 backdrop-blur-2xl border border-rose-500/30 rounded-3xl p-6 sm:p-7 mb-8 relative overflow-hidden shadow-2xl">
             <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-gradient-to-l from-rose-500/15 to-transparent pointer-events-none" />
             
             <div className="max-w-xl relative z-10">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/20 text-rose-300 text-xs font-bold rounded-full border border-rose-500/40 uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" /> {t.todayPlanBadge}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-white mt-3 leading-tight">
+              <h2 className="text-2xl sm:text-3xl font-black text-white mt-2.5 leading-tight">
                 {t.heroTitle}
               </h2>
               <p className="text-slate-200 text-sm mt-2 leading-relaxed">
@@ -268,81 +323,39 @@ export default function Home() {
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 mt-6">
+              <div className="flex flex-wrap gap-2.5 mt-5">
                 <button
                   onClick={() => setActiveTab('lessons')}
-                  className="px-5 py-2.5 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-bold text-xs sm:text-sm rounded-xl hover:opacity-95 shadow-lg shadow-rose-500/30 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+                  className={`px-4 py-2 text-white font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md ${
+                    activeTab === 'lessons'
+                      ? 'bg-rose-600 ring-2 ring-white/50'
+                      : 'bg-rose-500 hover:bg-rose-600'
+                  }`}
                 >
                   <GraduationCap className="w-4 h-4" /> {t.tabGrammarLessons}
                 </button>
                 <button
                   onClick={() => setActiveTab('ai')}
-                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-xs sm:text-sm rounded-xl hover:opacity-95 shadow-lg shadow-emerald-500/30 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+                  className={`px-4 py-2 text-white font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md ${
+                    activeTab === 'ai'
+                      ? 'bg-teal-700 ring-2 ring-white/50'
+                      : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-95'
+                  }`}
                 >
                   <Bot className="w-4 h-4" /> {t.btnAiChat}
                 </button>
                 <button
                   onClick={() => setActiveTab('study')}
-                  className="px-5 py-2.5 bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-slate-100 font-bold text-xs sm:text-sm rounded-xl active:scale-95 transition-all flex items-center gap-2 cursor-pointer shadow-md"
+                  className={`px-4 py-2 text-slate-100 font-bold text-xs sm:text-sm rounded-xl border border-slate-700 transition-all flex items-center gap-2 cursor-pointer shadow-md ${
+                    activeTab === 'study'
+                      ? 'bg-slate-700 ring-2 ring-white/50'
+                      : 'bg-slate-800/90 hover:bg-slate-700'
+                  }`}
                 >
                   <Flame className="w-4 h-4" /> {t.btnTodayWords}
                 </button>
               </div>
             </div>
-          </div>
-
-          {/* Navigation Tabs */}
-          <div className="flex border-b border-slate-750 mb-8 overflow-x-auto gap-2">
-            <button
-              onClick={() => setActiveTab('lessons')}
-              className={`pb-3 px-4 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
-                activeTab === 'lessons'
-                  ? 'border-rose-500 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <GraduationCap className="w-4 h-4" /> {t.tabGrammarLessons}
-            </button>
-            <button
-              onClick={() => setActiveTab('ai')}
-              className={`pb-3 px-4 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
-                activeTab === 'ai'
-                  ? 'border-emerald-500 text-emerald-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <Bot className="w-4 h-4" /> {t.tabAiChat}
-            </button>
-            <button
-              onClick={() => setActiveTab('study')}
-              className={`pb-3 px-4 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
-                activeTab === 'study'
-                  ? 'border-rose-500 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <BookOpen className="w-4 h-4" /> {t.tabDictionary}
-            </button>
-            <button
-              onClick={() => setActiveTab('grammar')}
-              className={`pb-3 px-4 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
-                activeTab === 'grammar'
-                  ? 'border-rose-500 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <PenTool className="w-4 h-4" /> {t.tabGrammar}
-            </button>
-            <button
-              onClick={() => setActiveTab('leaderboard')}
-              className={`pb-3 px-4 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
-                activeTab === 'leaderboard'
-                  ? 'border-rose-500 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              <Trophy className="w-4 h-4" /> {t.tabLeaderboard}
-            </button>
           </div>
 
           {/* Tab Views */}
